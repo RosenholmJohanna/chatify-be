@@ -54,14 +54,6 @@ const UserSchema = new mongoose.Schema({
       trim: true,
       minlenght: 3,
     },
-    email: {
-      type: String,
-      required: true,
-    },
-    avatar: {
-      type: String,
-      required: true,
-    },
     createdAt: {
       type: Date,
       default: () => new Date(),
@@ -70,10 +62,19 @@ const UserSchema = new mongoose.Schema({
   
   const User = mongoose.model("User", UserSchema);
 
+  // email: {
+  //   type: String,
+  //   required: true,
+  // },
+  // avatar: {
+  //   type: String,
+  //   required: true,
+  // },
+
 
   // USER REGISTRATION
 app.post("/register", async (req, res) => {
-    const { username, password, email, avatar } = req.body;
+    const { username, password } = req.body;
     try {
       const salt = bcrypt.genSaltSync();
       if (password.length < 3) {
@@ -85,8 +86,6 @@ app.post("/register", async (req, res) => {
         const newUser = await new User({
           username: username,
           password: bcrypt.hashSync(password, salt),
-          email: email,
-          avatar: avatar
         }).save();
         res.status(201).json({
           success: true,
